@@ -71,7 +71,6 @@ final class AttributesTests: XCTestCase {
         XCTAssertEqual(text, expected)
     }
 
-
     func testGroup() {
         let text = Group {
             "Hello".foreground(color: .white)
@@ -81,8 +80,32 @@ final class AttributesTests: XCTestCase {
         .alignment(.left)
         .build()
         let expected = NSMutableAttributedString()
-        expected.append(.init(string: "Hello", attributes: [ .foregroundColor: Color.white ]))
-        expected.append(.init(string: "World", attributes: [ .backgroundColor: Color.black ]))
+        expected.append(.init(string: "Hello", attributes: [.foregroundColor: Color.white]))
+        expected.append(.init(string: "World", attributes: [.backgroundColor: Color.black]))
+        let style = NSMutableParagraphStyle()
+        style.maximumLineHeight = 20
+        style.minimumLineHeight = 20
+        style.alignment = .left
+        expected.addAttribute(.paragraphStyle, value: style, range: NSRange(location: 0, length: expected.length))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testNestedGroup() {
+        let text = Group {
+            "Hello".foreground(color: .white)
+            Group {
+                "World".foreground(color: .white)
+                "Octree"
+            }.background(color: .black)
+        }
+        .lineHeight(20)
+        .alignment(.left)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "Hello", attributes: [.foregroundColor: Color.white]))
+        expected.append(.init(string: "World", attributes: [.foregroundColor: Color.white,
+                                                            .backgroundColor: Color.black]))
+        expected.append(.init(string: "Octree", attributes: [.backgroundColor: Color.black]))
         let style = NSMutableParagraphStyle()
         style.maximumLineHeight = 20
         style.minimumLineHeight = 20
