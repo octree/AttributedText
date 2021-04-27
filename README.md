@@ -1,6 +1,6 @@
 # AttributedText
 
-An elegant way to build `NSAttributedString` using `resultBuilder`. 
+An elegant way to build `NSAttributedString` using `@resultBuilder`. 
 
 
 
