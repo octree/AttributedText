@@ -7,22 +7,17 @@ An elegant way to build `NSAttributedString` . Powered by swift function builder
 ## Usage
 
 ```swift
-"Hello world".bold.italic.fontSize(20).build()
+let list = ["hello", "world"]
+let attributedText: NSAttributedString = .Builder {
+    "@resultBuilder".bold.italic.fontSize(18).foreground(color: .purple)
+    for elt in list {
+        elt.bold.link("https://swift.org")
+    }
+    if #available(iOS 14, *) {
+        "Wow".lineHeight(20)
+    }
+}.build()
 ```
-
-
-
-### Group
-
- ```swift
-let text = Group {
-	"Hello".foreground(color: .white).bold
-	"World".background(color: .black).italic
-	}
-	.lineHeight(20)
-	.alignment(.left)
-	.build()
- ```
 
 
 
