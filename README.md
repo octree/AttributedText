@@ -30,7 +30,7 @@ let attributedText: NSAttributedString = .Builder {
 
 ### Swift Package Manager
 * File > Swift Packages > Add Package Dependency
-* Add https://github.com/octree/SwiftWKBridge.git
+* Add https://github.com/octree/AttributedText.git
 * Select "Up to Next Major" with "1.0.0"
 
 
