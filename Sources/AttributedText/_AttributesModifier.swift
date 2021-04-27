@@ -61,21 +61,21 @@ extension _AttributeModifier {
 public extension AttributedTextSlice {
     var bold: AttributedTextSlice {
         _AttributeModifier(base: self) { (attributes: inout [NSAttributedString.Key: Any]) in
-            let font = (attributes[.font] as? Font) ?? Font()
+            let font = (attributes[.font] as? Font) ?? Font._default
             attributes[.font] = font.adding(trait: .traitBold).withSize(font.pointSize)
         }
     }
 
     var italic: AttributedTextSlice {
         _AttributeModifier(base: self) { (attributes: inout [NSAttributedString.Key: Any]) in
-            let font = (attributes[.font] as? Font) ?? Font()
+            let font = (attributes[.font] as? Font) ?? Font._default
             attributes[.font] = font.adding(trait: .traitItalic).withSize(font.pointSize)
         }
     }
 
     func fontSize(_ fontSize: CGFloat) -> AttributedTextSlice {
         _AttributeModifier(base: self) { (attributes: inout [NSAttributedString.Key: Any]) in
-            let font = (attributes[.font] as? Font) ?? Font()
+            let font = (attributes[.font] as? Font) ?? Font._default
             attributes[.font] = font.withSize(fontSize)
         }
     }

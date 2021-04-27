@@ -46,6 +46,13 @@ extension FontDescriptor.SymbolicTraits {
 #endif
 
 public extension Font {
+    internal static var _default: Font {
+        #if canImport(UIKit)
+        return .systemFont(ofSize: Font.systemFontSize)
+        #else
+        return .systemFont(ofSize: Font.systemFontSize)
+        #endif
+    }
     /// Font traits.
     var traits: FontDescriptor.SymbolicTraits {
         fontDescriptor.symbolicTraits

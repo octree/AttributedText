@@ -39,4 +39,3 @@ final class FunctionBuilderTests: XCTestCase {
         XCTAssertEqual(text.string, "0 hello1 world")
     }
 }
-
