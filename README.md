@@ -1,6 +1,6 @@
 # AttributedText
 
-An elegant way to build `NSAttributedString` . Powered by swift function builder.
+An elegant way to build `NSAttributedString` using `resultBuilder`. 
 
 
 
@@ -18,6 +18,15 @@ let attributedText: NSAttributedString = .Builder {
     }
 }.build()
 ```
+
+
+
+## Installation
+
+### Swift Package Manager
+* File > Swift Packages > Add Package Dependency
+* Add https://github.com/octree/SwiftWKBridge.git
+* Select "Up to Next Major" with "1.0.0"
 
 
 
