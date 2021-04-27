@@ -24,10 +24,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
 import Foundation
 
-@_functionBuilder public enum AttributedTextBuilder {
+@resultBuilder public enum AttributedTextBuilder {
     public static func buildBlock(_ items: AttributedTextSlice...) -> AttributedTextSlice {
         return items.flatMap { $0.texts }
     }
@@ -35,18 +34,29 @@ import Foundation
     public static func buildIf(_ items: AttributedTextSlice?...) -> AttributedTextSlice {
         return items.flatMap { $0?.texts ?? [] }
     }
-}
 
-public struct ForEach<S: Sequence>: AttributedTextSlice {
-    private let s: S
-    private var builder: (S.Element) -> AttributedTextSlice
-    public var texts: [AttributedText] {
-        s.flatMap { builder($0).texts }
+    public static func buildExpression(_ slice: AttributedTextSlice) -> AttributedTextSlice {
+        return slice
     }
 
-    public init(_ s: S, @AttributedTextBuilder builder: @escaping (S.Element) -> AttributedTextSlice) {
-        self.s = s
-        self.builder = builder
+    public static func buildArray(_ components: [AttributedTextSlice]) -> AttributedTextSlice {
+        return components.flatMap { $0.texts }
+    }
+
+    public static func buildLimitedAvailability(_ component: AttributedTextSlice) -> AttributedTextSlice {
+        return component
+    }
+
+    public static func buildEither(first component: AttributedTextSlice) -> AttributedTextSlice {
+        return component
+    }
+
+    public static func buildEither(second component: AttributedTextSlice) -> AttributedTextSlice {
+        component
+    }
+
+    public static func buildOptional(_ component: AttributedTextSlice?) -> AttributedTextSlice {
+        component ?? [AttributedText]()
     }
 }
 

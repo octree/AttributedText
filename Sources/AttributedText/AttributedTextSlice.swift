@@ -43,4 +43,3 @@ public extension AttributedTextSlice {
         return attributed
     }
 }
-

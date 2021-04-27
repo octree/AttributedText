@@ -24,7 +24,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
 #if canImport(UIKit)
 import UIKit
 #else
@@ -39,7 +38,7 @@ extension AttributedText: AttributedTextSlice {
 
 extension String: AttributedTextSlice {
     public var texts: [AttributedText] {
-        [AttributedText(stringLiteral: self)]
+        [AttributedText(text: self, attributes: [:])]
     }
 }
 
@@ -48,4 +47,3 @@ extension Array: AttributedTextSlice where Element: AttributedTextSlice {
         return flatMap { $0.texts }
     }
 }
-

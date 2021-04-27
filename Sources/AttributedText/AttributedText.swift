@@ -30,14 +30,10 @@ import UIKit
 import AppKit
 #endif
 
-public struct AttributedText: ExpressibleByStringLiteral {
+public struct AttributedText {
     public typealias StringLiteralType = String
     var text: String
     var attributes: [NSAttributedString.Key: Any]
-    public init(stringLiteral value: String) {
-        text = value
-        attributes = [:]
-    }
 
     public init(text: String, attributes: [NSAttributedString.Key: Any]) {
         self.text = text
