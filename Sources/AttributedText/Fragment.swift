@@ -48,7 +48,7 @@ public enum Fragment {
         case let .span(text, attributes):
             return .init(string: text, attributes: attributes)
         case let .attachment(attachment):
-        return .init(attachment: attachment)
+            return .init(attachment: attachment)
         }
     }
 
