@@ -38,11 +38,11 @@ struct _AttributeModifier {
 }
 
 extension _AttributeModifier: AttributedTextSlice {
-    var texts: [AttributedText] {
-        base.texts.map { text in
-            var attrs = text.attributes
+    var fragments: [Fragment] {
+        base.fragments.map { fragment in
+            var attrs = fragment.attributes
             modifier(&attrs)
-            return AttributedText(text: text.text, attributes: attrs)
+            return fragment.replacing(attributes: attrs)
         }
     }
 }

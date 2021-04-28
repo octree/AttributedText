@@ -30,13 +30,34 @@ import UIKit
 import AppKit
 #endif
 
-public struct AttributedText {
-    public typealias StringLiteralType = String
-    var text: String
-    var attributes: [NSAttributedString.Key: Any]
+public enum Fragment {
+    case span(String, [NSAttributedString.Key: Any])
+    case attachment(NSTextAttachment)
 
-    public init(text: String, attributes: [NSAttributedString.Key: Any]) {
-        self.text = text
-        self.attributes = attributes
+    var attributes: [NSAttributedString.Key: Any] {
+        switch self {
+        case let .span(_, attributes):
+            return attributes
+        case .attachment:
+            return [:]
+        }
+    }
+
+    var attributedString: NSAttributedString {
+        switch self {
+        case let .span(text, attributes):
+            return .init(string: text, attributes: attributes)
+        case let .attachment(attachment):
+        return .init(attachment: attachment)
+        }
+    }
+
+    func replacing(attributes: [NSAttributedString.Key: Any]) -> Self {
+        switch self {
+        case let .span(text, _):
+            return .span(text, attributes)
+        case .attachment:
+            return self
+        }
     }
 }

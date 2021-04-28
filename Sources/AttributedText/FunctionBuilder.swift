@@ -28,11 +28,11 @@ import Foundation
 
 @resultBuilder public enum AttributedTextBuilder {
     public static func buildBlock(_ items: AttributedTextSlice...) -> AttributedTextSlice {
-        return items.flatMap { $0.texts }
+        return items.flatMap { $0.fragments }
     }
 
     public static func buildIf(_ items: AttributedTextSlice?...) -> AttributedTextSlice {
-        return items.flatMap { $0?.texts ?? [] }
+        return items.flatMap { $0?.fragments ?? [] }
     }
 
     public static func buildExpression(_ slice: AttributedTextSlice) -> AttributedTextSlice {
@@ -40,7 +40,7 @@ import Foundation
     }
 
     public static func buildArray(_ components: [AttributedTextSlice]) -> AttributedTextSlice {
-        return components.flatMap { $0.texts }
+        return components.flatMap { $0.fragments }
     }
 
     public static func buildLimitedAvailability(_ component: AttributedTextSlice) -> AttributedTextSlice {
@@ -56,22 +56,22 @@ import Foundation
     }
 
     public static func buildOptional(_ component: AttributedTextSlice?) -> AttributedTextSlice {
-        component ?? [AttributedText]()
+        component ?? [Fragment]()
     }
 }
 
 public struct Group: AttributedTextSlice {
-    public var texts: [AttributedText]
+    public var fragments: [Fragment]
     public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
-        texts = builder().texts
+        fragments = builder().fragments
     }
 }
 
 public extension NSAttributedString {
     struct Builder: AttributedTextSlice {
-        public var texts: [AttributedText]
+        public var fragments: [Fragment]
         public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
-            texts = builder().texts
+            fragments = builder().fragments
         }
     }
 }

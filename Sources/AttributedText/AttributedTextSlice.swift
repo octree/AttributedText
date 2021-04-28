@@ -31,14 +31,14 @@ import AppKit
 #endif
 
 public protocol AttributedTextSlice {
-    var texts: [AttributedText] { get }
+    var fragments: [Fragment] { get }
 }
 
 public extension AttributedTextSlice {
     func build() -> NSAttributedString {
         let attributed = NSMutableAttributedString()
-        texts.forEach {
-            attributed.append(.init(string: $0.text, attributes: $0.attributes))
+        fragments.forEach {
+            attributed.append($0.attributedString)
         }
         return attributed
     }

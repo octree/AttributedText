@@ -26,24 +26,31 @@
 
 #if canImport(UIKit)
 import UIKit
+typealias Image = UIImage
 #else
 import AppKit
 #endif
 
-extension AttributedText: AttributedTextSlice {
-    public var texts: [AttributedText] {
+extension Fragment: AttributedTextSlice {
+    public var fragments: [Fragment] {
         [self]
     }
 }
 
 extension String: AttributedTextSlice {
-    public var texts: [AttributedText] {
-        [AttributedText(text: self, attributes: [:])]
+    public var fragments: [Fragment] {
+        [.span(self, [:])]
     }
 }
 
 extension Array: AttributedTextSlice where Element: AttributedTextSlice {
-    public var texts: [AttributedText] {
-        return flatMap { $0.texts }
+    public var fragments: [Fragment] {
+        return flatMap { $0.fragments }
+    }
+}
+
+extension NSTextAttachment: AttributedTextSlice {
+    public var fragments: [Fragment] {
+        [.attachment(self)]
     }
 }
