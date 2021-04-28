@@ -13,11 +13,6 @@ let list = ["hello", "world"]
 
 let attributedText: NSAttributedString = .Builder {
     "@resultBuilder".bold.italic.foreground(color: .purple)
-  
-    for elt in list {
-        elt.bold.link("https://swift.org")
-    }
-  
     if #available(iOS 14, *) {
         "Wow".lineHeight(20)
     }
@@ -25,6 +20,26 @@ let attributedText: NSAttributedString = .Builder {
 ```
 
 
+
+> Attachment and Loops
+
+```swift
+let list = ["谈笑风生", "香港记者", "人生经验", "无可奉告", "身经百战", "亦可赛艇", "图样图森破", "另请高明"]
+textView.attributedText = .Builder {
+    attachment
+
+    " Result build is awesome\n".bold
+        .fontSize(24)
+        .foreground(color: .label)
+
+    for element in list {
+        element.font(.systemFont(ofSize: 16))
+            .foreground(color: .random)
+    }
+}
+.build()
+
+![attachment](./Snapshots/attachment.png)
 
 ## Installation
 
