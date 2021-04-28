@@ -38,6 +38,7 @@ textView.attributedText = .Builder {
     }
 }
 .build()
+```
 
 ![attachment](./Snapshots/attachment.png)
 
