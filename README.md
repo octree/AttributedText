@@ -1,6 +1,6 @@
 # AttributedText
 
-An elegant way to build `NSAttributedString` just like SwiftUI. 
+An elegant way to build `NSAttributedString` like SwiftUI. 
 
 Power by swift `Result Builder`
 
