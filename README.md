@@ -28,7 +28,7 @@ let list = ["谈笑风生", "香港记者", "人生经验", "无可奉告", "身
 textView.attributedText = .Builder {
     attachment
 
-    " Result build is awesome\n".bold
+    " Result builder is awesome\n".bold
         .fontSize(24)
         .foreground(color: .label)
 
