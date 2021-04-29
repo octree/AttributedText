@@ -14,7 +14,7 @@ let list = ["hello", "world"]
 let attributedText: NSAttributedString = .Builder {
   "@resultBuilder".bold.italic.foreground(color: .purple)
   if #available(iOS 14, *) {
-		"Wow".lineHeight(20)
+    "Wow".lineHeight(20)
   }
 }
 .build()
