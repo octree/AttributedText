@@ -12,11 +12,12 @@ Power by swift `Result Builder`
 let list = ["hello", "world"]
 
 let attributedText: NSAttributedString = .Builder {
-    "@resultBuilder".bold.italic.foreground(color: .purple)
-    if #available(iOS 14, *) {
-        "Wow".lineHeight(20)
-    }
-}.build()
+  "@resultBuilder".bold.italic.foreground(color: .purple)
+  if #available(iOS 14, *) {
+		"Wow".lineHeight(20)
+  }
+}
+.build()
 ```
 
 
@@ -26,16 +27,19 @@ let attributedText: NSAttributedString = .Builder {
 ```swift
 let list = ["谈笑风生", "香港记者", "人生经验", "无可奉告", "身经百战", "亦可赛艇", "图样图森破", "另请高明"]
 textView.attributedText = .Builder {
+  Group {
     attachment
-
     " Result builder is awesome\n".bold
         .fontSize(24)
         .foreground(color: .label)
+  }
+  .lineSpacing(8)
 
-    for element in list {
-        element.font(.systemFont(ofSize: 16))
-            .foreground(color: .random)
-    }
+  for element in list {
+    element.font(.systemFont(ofSize: 16))
+        .foreground(color: .random)
+        .lineSpacing(4)
+  }
 }
 .build()
 ```
