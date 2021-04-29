@@ -30,34 +30,34 @@ import UIKit
 import AppKit
 #endif
 
-public enum Fragment {
-    case span(String, [NSAttributedString.Key: Any])
-    case attachment(NSTextAttachment)
-
-    var attributes: [NSAttributedString.Key: Any] {
-        switch self {
-        case let .span(_, attributes):
-            return attributes
-        case .attachment:
-            return [:]
-        }
+public struct Fragment {
+    enum Content {
+        case text(String)
+        case attachment(NSTextAttachment)
     }
+    var content: Content
+    var attributes: [NSAttributedString.Key: Any]
 
     var attributedString: NSAttributedString {
-        switch self {
-        case let .span(text, attributes):
+        switch content {
+        case let .text(text):
             return .init(string: text, attributes: attributes)
         case let .attachment(attachment):
-            return .init(attachment: attachment)
+            let attributed = NSMutableAttributedString(attachment: attachment)
+            attributed.addAttributes(attributes, range: NSRange(location: 0, length: attributed.length))
+            return attributed
         }
     }
 
     func replacing(attributes: [NSAttributedString.Key: Any]) -> Self {
-        switch self {
-        case let .span(text, _):
-            return .span(text, attributes)
-        case .attachment:
-            return self
-        }
+        .init(content: content, attributes: attributes)
+    }
+
+    static func attachment(_ attachment: NSTextAttachment) -> Self {
+        .init(content: .attachment(attachment), attributes: [:])
+    }
+
+    static func span(_ text: String, _ attributes: [NSAttributedString.Key: Any]) -> Self {
+        .init(content: .text(text), attributes: attributes)
     }
 }
