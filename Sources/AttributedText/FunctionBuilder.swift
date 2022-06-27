@@ -28,27 +28,27 @@ import Foundation
 
 @resultBuilder public enum AttributedTextBuilder {
     public static func buildBlock(_ items: AttributedTextSlice...) -> AttributedTextSlice {
-        return items.flatMap { $0.fragments }
+        items
     }
 
     public static func buildIf(_ items: AttributedTextSlice?...) -> AttributedTextSlice {
-        return items.flatMap { $0?.fragments ?? [] }
+        items.compactMap { $0 }
     }
 
     public static func buildExpression(_ slice: AttributedTextSlice) -> AttributedTextSlice {
-        return slice
+        slice
     }
 
     public static func buildArray(_ components: [AttributedTextSlice]) -> AttributedTextSlice {
-        return components.flatMap { $0.fragments }
+        components
     }
 
     public static func buildLimitedAvailability(_ component: AttributedTextSlice) -> AttributedTextSlice {
-        return component
+        component
     }
 
     public static func buildEither(first component: AttributedTextSlice) -> AttributedTextSlice {
-        return component
+        component
     }
 
     public static func buildEither(second component: AttributedTextSlice) -> AttributedTextSlice {
@@ -56,22 +56,30 @@ import Foundation
     }
 
     public static func buildOptional(_ component: AttributedTextSlice?) -> AttributedTextSlice {
-        component ?? [Fragment]()
+        component ?? ""
     }
 }
 
 public struct Group: AttributedTextSlice {
-    public var fragments: [Fragment]
+    public var base: AttributedTextSlice
     public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
-        fragments = builder().fragments
+        base = builder()
+    }
+
+    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+        base.fragments(with: attributes)
     }
 }
 
 public extension NSAttributedString {
     struct Builder: AttributedTextSlice {
-        public var fragments: [Fragment]
+        public var base: AttributedTextSlice
         public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
-            fragments = builder().fragments
+            base = builder()
+        }
+
+        public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+            base.fragments(with: attributes)
         }
     }
 }

@@ -49,8 +49,9 @@ public struct Fragment {
         }
     }
 
-    func replacing(attributes: [NSAttributedString.Key: Any]) -> Self {
-        .init(content: content, attributes: attributes)
+    func merging(attributes: [NSAttributedString.Key: Any]) -> Fragment {
+        let attributes = self.attributes.merging(attributes) { x, _ in x }
+        return .init(content: content, attributes: attributes)
     }
 
     static func attachment(_ attachment: NSTextAttachment) -> Self {
