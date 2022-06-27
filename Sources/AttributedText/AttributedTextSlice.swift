@@ -31,13 +31,13 @@ import AppKit
 #endif
 
 public protocol AttributedTextSlice {
-    var fragments: [Fragment] { get }
+    func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment]
 }
 
 public extension AttributedTextSlice {
     func build() -> NSAttributedString {
         let attributed = NSMutableAttributedString()
-        fragments.forEach {
+        fragments(with: [:]).forEach {
             attributed.append($0.attributedString)
         }
         return attributed

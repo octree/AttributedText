@@ -32,25 +32,25 @@ import AppKit
 #endif
 
 extension Fragment: AttributedTextSlice {
-    public var fragments: [Fragment] {
-        [self]
+    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+        [merging(attributes: attributes)]
     }
 }
 
 extension String: AttributedTextSlice {
-    public var fragments: [Fragment] {
-        [.span(self, [:])]
+    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+        [.span(self, attributes)]
     }
 }
 
-extension Array: AttributedTextSlice where Element: AttributedTextSlice {
-    public var fragments: [Fragment] {
-        return flatMap { $0.fragments }
+extension Array: AttributedTextSlice where Element == AttributedTextSlice {
+    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+        flatMap { $0.fragments(with: attributes) }
     }
 }
 
 extension NSTextAttachment: AttributedTextSlice {
-    public var fragments: [Fragment] {
-        [.attachment(self)]
+    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+        [.attachment(self).merging(attributes: attributes)]
     }
 }

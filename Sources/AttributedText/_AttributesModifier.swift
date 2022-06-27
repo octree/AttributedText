@@ -38,21 +38,19 @@ struct _AttributeModifier {
 }
 
 extension _AttributeModifier: AttributedTextSlice {
-    var fragments: [Fragment] {
-        base.fragments.map { fragment in
-            var attrs = fragment.attributes
-            modifier(&attrs)
-            return fragment.replacing(attributes: attrs)
-        }
+    func fragments(with attributes: [NSAttributedString.Key : Any]) -> [Fragment] {
+        var attributes = attributes
+        modifier(&attributes)
+        return base.fragments(with: attributes)
     }
 }
 
 extension _AttributeModifier {
-    init(base: AttributedTextSlice, pagraphStyleModifier: @escaping (NSMutableParagraphStyle) -> Void) {
+    init(base: AttributedTextSlice, paragraphStyleModifier: @escaping (NSMutableParagraphStyle) -> Void) {
         self.base = base
         modifier = { attributes in
             let paragraphStyle = (attributes[NSAttributedString.Key.paragraphStyle] ?? NSMutableParagraphStyle.default.mutableCopy()) as! NSMutableParagraphStyle
-            pagraphStyleModifier(paragraphStyle)
+            paragraphStyleModifier(paragraphStyle)
             attributes[.paragraphStyle] = paragraphStyle
         }
     }

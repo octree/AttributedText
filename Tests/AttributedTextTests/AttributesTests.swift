@@ -1,5 +1,5 @@
-import XCTest
 @testable import AttributedText
+import XCTest
 
 final class AttributesTests: XCTestCase {
     func testFont() {
@@ -10,7 +10,7 @@ final class AttributesTests: XCTestCase {
     }
 
     func testFontSize() {
-        let font = Font.systemFont(ofSize: 20)
+        let font = Font.systemFont(ofSize: 11)
         let text = "Octree".font(.systemFont(ofSize: 11)).fontSize(20).build()
         let expected = NSAttributedString(string: "Octree", attributes: [.font: font])
         XCTAssertEqual(text, expected)
@@ -100,12 +100,14 @@ final class AttributesTests: XCTestCase {
         }
         .lineHeight(20)
         .alignment(.left)
+        .foreground(color: .red)
         .build()
         let expected = NSMutableAttributedString()
         expected.append(.init(string: "Hello", attributes: [.foregroundColor: Color.white]))
         expected.append(.init(string: "World", attributes: [.foregroundColor: Color.white,
                                                             .backgroundColor: Color.black]))
-        expected.append(.init(string: "Octree", attributes: [.backgroundColor: Color.black]))
+        expected.append(.init(string: "Octree", attributes: [.foregroundColor: Color.red,
+                                                             .backgroundColor: Color.black]))
         let style = NSMutableParagraphStyle()
         style.maximumLineHeight = 20
         style.minimumLineHeight = 20
