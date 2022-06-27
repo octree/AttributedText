@@ -27,54 +27,79 @@
 import Foundation
 
 @resultBuilder public enum AttributedTextBuilder {
-    public static func buildBlock(_ items: AttributedTextSlice...) -> AttributedTextSlice {
-        items
+
+    public static func buildExpression(_ slice: AttributedTextSlice) -> [AttributedTextSlice] {
+        [slice]
     }
 
-    public static func buildIf(_ items: AttributedTextSlice?...) -> AttributedTextSlice {
-        items.compactMap { $0 }
+    public static func buildBlock(_ items: [AttributedTextSlice]...) -> [AttributedTextSlice] {
+        items.flatMap { $0 }
     }
 
-    public static func buildExpression(_ slice: AttributedTextSlice) -> AttributedTextSlice {
-        slice
+    public static func buildIf(_ items: [AttributedTextSlice]?...) -> [AttributedTextSlice] {
+        items.flatMap { $0 ?? [] }
     }
 
-    public static func buildArray(_ components: [AttributedTextSlice]) -> AttributedTextSlice {
-        components
+    public static func buildArray(_ components: [[AttributedTextSlice]]) -> [AttributedTextSlice] {
+        components.flatMap { $0 }
     }
 
-    public static func buildLimitedAvailability(_ component: AttributedTextSlice) -> AttributedTextSlice {
+    public static func buildLimitedAvailability(_ component: [AttributedTextSlice]) -> [AttributedTextSlice] {
         component
     }
 
-    public static func buildEither(first component: AttributedTextSlice) -> AttributedTextSlice {
+    public static func buildEither(first component: [AttributedTextSlice]) -> [AttributedTextSlice] {
         component
     }
 
-    public static func buildEither(second component: AttributedTextSlice) -> AttributedTextSlice {
+    public static func buildEither(second component: [AttributedTextSlice]) -> [AttributedTextSlice] {
         component
     }
 
-    public static func buildOptional(_ component: AttributedTextSlice?) -> AttributedTextSlice {
-        component ?? ""
+    public static func buildOptional(_ component: [AttributedTextSlice]?) -> [AttributedTextSlice] {
+        component ?? []
     }
 }
 
 public struct Group: AttributedTextSlice {
-    public var base: AttributedTextSlice
-    public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
-        base = builder()
+    public var separator: [AttributedTextSlice]
+    public var base: [AttributedTextSlice]
+    public init(@AttributedTextBuilder separator: () -> [AttributedTextSlice],  @AttributedTextBuilder content: () -> [AttributedTextSlice]) {
+        self.separator = separator()
+        base = content()
+    }
+
+    public init(separator: String,  @AttributedTextBuilder content: () -> [AttributedTextSlice]) {
+        self.separator = [separator]
+        base = content()
+    }
+
+    public init(separator: AttributedTextSlice,  @AttributedTextBuilder content: () -> [AttributedTextSlice]) {
+        self.separator = [separator]
+        base = content()
+    }
+
+    public init(@AttributedTextBuilder content: () -> [AttributedTextSlice]) {
+        self.separator = []
+        base = content()
     }
 
     public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
-        base.fragments(with: attributes)
+        guard let first = base.first else { return [] }
+        let separator = separator.fragments(with: attributes)
+        var fragments: [Fragment] = first.fragments(with: attributes)
+        for element in base.dropFirst() {
+            fragments.append(contentsOf: separator)
+            fragments.append(contentsOf: element.fragments(with: attributes))
+        }
+        return fragments
     }
 }
 
 public extension NSAttributedString {
     struct Builder: AttributedTextSlice {
-        public var base: AttributedTextSlice
-        public init(@AttributedTextBuilder builder: () -> AttributedTextSlice) {
+        public var base: [AttributedTextSlice]
+        public init(@AttributedTextBuilder builder: () -> [AttributedTextSlice]) {
             base = builder()
         }
 

@@ -115,4 +115,82 @@ final class AttributesTests: XCTestCase {
         expected.addAttribute(.paragraphStyle, value: style, range: NSRange(location: 0, length: expected.length))
         XCTAssertEqual(text, expected)
     }
+
+    func testSeparatorWithEmptyGroup() {
+        let text = Group(separator: "-") {}
+        .foreground(color: .red)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: ""))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testSeparatorWithSingleElement() {
+        let text = Group(separator: "-") {
+            "Hello"
+        }
+        .foreground(color: .red)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "Hello", attributes: [.foregroundColor: Color.red]))
+        expected.append(.init(string: ""))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testSeparatorWithSingleNestedGroup() {
+        let text = Group(separator: "-") {
+            Group {
+                "Hello"
+                "World"
+            }
+        }
+        .foreground(color: .red)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "HelloWorld", attributes: [.foregroundColor: Color.red]))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testSeparatorWithForIn() {
+        let list = ["Hello", "World"]
+        let text = Group(separator: "-") {
+            for x in list {
+                x
+            }
+        }
+        .foreground(color: .red)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "Hello-World", attributes: [.foregroundColor: Color.red]))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testSeparatorWithStringLiteral() {
+        let text = Group(separator: "-") {
+            "Hello"
+            "World"
+        }
+        .foreground(color: .red)
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "Hello-World", attributes: [.foregroundColor: Color.red]))
+        XCTAssertEqual(text, expected)
+    }
+
+    func testSeparatorWithSliceBuilder() {
+        let text = Group {
+            "-".foreground(color: .blue)
+        } content: {
+            "Hello"
+            "World"
+        }
+        .foreground(color: .red)
+
+        .build()
+        let expected = NSMutableAttributedString()
+        expected.append(.init(string: "Hello", attributes: [.foregroundColor: Color.red]))
+        expected.append(.init(string: "-", attributes: [.foregroundColor: Color.blue]))
+        expected.append(.init(string: "World", attributes: [.foregroundColor: Color.red]))
+        XCTAssertEqual(text, expected)
+    }
 }
