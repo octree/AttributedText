@@ -43,8 +43,8 @@ extension String: AttributedTextSlice {
     }
 }
 
-extension Array: AttributedTextSlice where Element == AttributedTextSlice {
-    public func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
+extension Array where Self.Element == AttributedTextSlice {
+    func fragments(with attributes: [NSAttributedString.Key: Any]) -> [Fragment] {
         flatMap { $0.fragments(with: attributes) }
     }
 }
